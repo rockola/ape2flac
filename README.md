@@ -5,4 +5,4 @@ zsh script for splitting APE files using the corresponding CUE file and converti
 
 Tested on Ubuntu.
 
-Requires: ffmpeg shntool cuetools flac
+Requires: zsh ffmpeg shntool cuetools flac
