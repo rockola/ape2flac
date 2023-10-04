@@ -1,0 +1,34 @@
+#!/usr/bin/env zsh
+
+for ape in **/*.ape
+do
+    base="${ape%.ape}"
+    cue="${base}.cue"
+    flac="${base}.flac"
+
+    # Convert monolithic APE to FLAC
+    echo ffmpeg -i "${ape}" "${flac}"
+    ffmpeg -i "${ape}" "${flac}"
+
+    # Make subdirectory named after monolithic file
+    #   
+    # This prevents mixing up tracks when there are more than one APE files in a single directory
+    subdir="${base}"
+    echo mkdir -p "${subdir}"
+    mkdir -p "${subdir}"
+
+    # Split and name individual FLAC files
+    echo shnsplit -f "${cue}" -o flac -t "%n %t" -d "${subdir}" "${flac}"
+    shnsplit -f "${cue}" -o flac -t "%n %t" -d "${subdir}" "${flac}"
+
+    # Tag individual FLAC files
+    individual="${subdir}/"*.flac
+    echo cuetag "${cue}" "${individual}"
+    cuetag "$cue" "${individual}"
+
+    # Add Replay Gain tags
+    echo metaflac --add-replay-gain "${individual}"
+    metaflac --add-replay-gain "${individual}"
+done
+
+
